@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAFER - ตะกร้าสินค้า</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts: Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body { font-family: 'Prompt', sans-serif; }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="bg-white py-4 px-6 shadow-sm z-20 sticky top-0">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-end gap-4 mb-4 items-center">
+                <a href="cart.html" class="text-green-600 transition scale-110 relative icon-cart-link">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" alt="Cart" class="w-8 h-8 object-contain">
+                </a>
+                <!-- ปุ่มโปรไฟล์ (มี class icon-profile-link) -->
+                <a href="register.html" class="hover:opacity-80 transition icon-profile-link">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" alt="User" class="w-8 h-8 object-contain rounded-full">
+                </a>
+            </div>
+            <div class="flex flex-wrap items-center justify-between">
+                <a href="HOMEPAGE.html" class="hover:text-green-600 transition group text-center px-4">
+                    <span class="block text-lg font-medium group-hover:font-bold">หน้าหลัก</span>
+                    <span class="block text-sm font-bold group-hover:text-green-700">Home</span>
+                </a>
+                <div class="hidden md:flex gap-10 items-center text-center text-gray-700">
+                    <a href="CAMERA.html" class="hover:text-green-600 transition group"><span class="block text-lg font-medium group-hover:font-bold">กล้อง</span><span class="block text-sm font-bold group-hover:text-green-700">Camera</span></a>
+                    <a href="Studios.html" class="hover:text-green-600 transition group">
+                        <span class="block text-lg font-medium group-hover:font-bold">สตูดิโอ</span>
+                        <span class="block text-sm font-bold group-hover:text-green-700">Studios</span>
+                    </a>
+                    <a href="HOUSE.HTML" class="hover:text-green-600 transition group">
+                        <span class="block text-lg font-medium group-hover:font-bold">บ้าน</span>
+                        <span class="block text-sm font-bold group-hover:text-green-700">House</span>
+                    </a>
+                    <a href="Contact.html" class="hover:text-green-600 transition group"><span class="block text-lg font-medium group-hover:font-bold">ติดต่อเรา</span><span class="block text-sm font-bold group-hover:text-green-700">Contact</span></a>
+                    <a href="howtorent.html" class="hover:text-green-600 transition group"><span class="block text-lg font-medium group-hover:font-bold">วิธีเช่า</span><span class="block text-sm font-bold group-hover:text-green-700">How to Rent</span></a>
+                </div>
+                
+                <!-- ปุ่ม Search -->
+                <div class="text-2xl text-gray-800 cursor-pointer hover:text-green-600 transition" onclick="toggleSearch()">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ================= CONTENT ================= -->
+    <div class="max-w-7xl mx-auto w-full px-6 mt-6">
+        <a href="CAMERA.html" class="text-gray-600 hover:text-green-600 font-bold inline-flex items-center gap-2 transition hover:-translate-x-1">
+            <i class="fa-solid fa-arrow-left"></i> เลือกสินค้าเพิ่ม
+        </a>
+    </div>
+
+    <div class="max-w-4xl mx-auto w-full p-6 mt-4 mb-20 bg-white rounded-xl shadow-lg min-h-[50vh] border border-gray-100 relative">
+        
+        <div class="flex items-center justify-between border-b pb-4 mb-6">
+            <div class="flex items-center gap-3">
+                <span class="bg-green-100 p-2 rounded-full text-green-600"><i class="fa-solid fa-cart-shopping"></i></span>
+                <h1 class="text-2xl font-bold text-gray-800">สินค้าในตะกร้าของคุณ</h1>
+            </div>
+            <button onclick="clearCart()" class="text-red-500 text-sm hover:text-red-700 hover:underline transition"><i class="fa-regular fa-trash-can"></i> ล้างตะกร้าทั้งหมด</button>
+        </div>
+
+        <!-- พื้นที่แสดงรายการสินค้า -->
+        <div id="cart-items-container" class="space-y-4"></div>
+        
+        <!-- Empty State -->
+        <div id="empty-cart-msg" class="hidden flex flex-col items-center justify-center py-16 text-gray-400">
+            <i class="fa-solid fa-basket-shopping text-6xl mb-4 opacity-30"></i>
+            <p class="text-lg font-medium">ยังไม่มีสินค้าในตะกร้า</p>
+            <a href="CAMERA.html" class="mt-4 px-6 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition shadow-md">ไปเลือกสินค้าเลย</a>
+        </div>
+
+        <!-- ส่วนเลือกวันเวลา (ใช้คำนวณเงิน) -->
+        <div id="rental-info" class="mt-8 bg-blue-50 p-6 rounded-xl border border-blue-100 hidden">
+            <div class="flex items-center justify-between mb-4 border-b border-blue-200 pb-2">
+                <h3 class="text-lg font-bold text-blue-800"><i class="fa-regular fa-calendar-check"></i> ระบุวันและเวลา (เพื่อคำนวณราคา)</h3>
+                <span id="duration-badge" class="bg-white text-gray-500 text-xs font-bold px-3 py-1 rounded-full shadow-sm">กรุณาเลือกวันเวลา</span>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- รับของ -->
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-blue-100">
+                    <h4 class="font-bold text-green-600 mb-2 text-sm">วันรับของ (Pick-up)</h4>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="date" id="pickupDate" onchange="calculateTotal()" class="w-full p-2 border rounded text-sm focus:ring-2 focus:ring-green-400 outline-none">
+                        <input type="time" id="pickupTime" onchange="calculateTotal()" class="w-full p-2 border rounded text-sm focus:ring-2 focus:ring-green-400 outline-none">
+                    </div>
+                </div>
+
+                <!-- คืนของ -->
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-blue-100">
+                    <h4 class="font-bold text-red-500 mb-2 text-sm">วันคืนของ (Return)</h4>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="date" id="returnDate" onchange="calculateTotal()" class="w-full p-2 border rounded text-sm focus:ring-2 focus:ring-red-400 outline-none">
+                        <input type="time" id="returnTime" onchange="calculateTotal()" class="w-full p-2 border rounded text-sm focus:ring-2 focus:ring-red-400 outline-none">
+                    </div>
+                </div>
+            </div>
+            <!-- แจ้งเตือนการคิดเงิน -->
+            <p class="text-xs text-gray-500 mt-2 text-right">
+                <span class="font-bold text-blue-600">* บ้าน/กล้อง คิดเป็นวัน</span> | <span class="font-bold text-purple-600">สตูดิโอ คิดเป็นชั่วโมง</span>
+            </p>
+        </div>
+
+        <!-- สรุปยอดเงิน -->
+        <div id="cart-summary" class="mt-8 border-t pt-6 flex flex-col md:flex-row justify-between items-center md:items-end hidden">
+            <div class="text-gray-500 text-sm mb-4 md:mb-0">
+                * ราคาสุทธิคำนวณตามประเภทสินค้าและระยะเวลา
+            </div>
+            <div class="flex flex-col items-end w-full md:w-auto">
+                <div class="flex items-end gap-2 mb-4">
+                    <span class="text-gray-600 text-xl">ยอดรวมสุทธิ:</span>
+                    <span id="total-price" class="font-bold text-4xl text-green-600">฿0</span>
+                </div>
+                <button onclick="checkout()" class="w-full md:w-auto bg-black text-white px-8 py-3 rounded-xl font-bold hover:bg-gray-800 transition transform hover:scale-105 shadow-lg">
+                    ยืนยันคำสั่งซื้อ <i class="fa-solid fa-check ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL ใบเสร็จ ================= -->
+    <div id="receiptModal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden relative animate-fade-in max-h-[90vh] overflow-y-auto">
+            <div class="bg-green-500 p-4 text-white text-center">
+                <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-green-500 text-2xl mx-auto mb-2">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <h2 class="text-2xl font-bold">จองสำเร็จ!</h2>
+                <p class="text-sm opacity-90">กรุณาแคปหน้าจอนี้เพื่อเป็นหลักฐาน</p>
+            </div>
+
+            <div class="p-6">
+                <div class="text-center mb-6 border-b pb-4 border-dashed border-gray-300">
+                    <p class="text-gray-500 text-xs uppercase">Order ID</p>
+                    <p id="bill-order-id" class="text-2xl font-black text-gray-800 tracking-wider">ORD-XXXXXX</p>
+                </div>
+
+                <div class="flex justify-between text-sm mb-4">
+                    <div>
+                        <p class="text-gray-500">รับ:</p>
+                        <p id="bill-pickup" class="font-bold text-gray-800">-</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-gray-500">คืน:</p>
+                        <p id="bill-return" class="font-bold text-gray-800">-</p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-3 rounded-lg mb-4 text-sm">
+                    <p class="font-bold text-gray-500 mb-2 border-b pb-1">รายการสินค้า</p>
+                    <div id="bill-items" class="space-y-1 text-gray-700"></div>
+                </div>
+
+                <div class="flex justify-between items-center text-xl font-bold text-gray-800 mb-6">
+                    <span>ยอดสุทธิ</span>
+                    <span id="bill-total" class="text-green-600">฿0</span>
+                </div>
+
+                <button onclick="finishOrder()" class="w-full bg-black text-white py-3 rounded-lg font-bold hover:bg-gray-800 transition">
+                    ตกลง / กลับหน้าติดต่อ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= SEARCH MODAL ================= -->
+    <div id="searchModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-start justify-center pt-20 backdrop-blur-sm transition-opacity duration-300">
+        <div class="bg-white w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden transform transition-all scale-100 mx-4">
+            <div class="p-4 border-b flex items-center gap-3 relative">
+                <i class="fa-solid fa-magnifying-glass text-gray-400 text-xl"></i>
+                <input type="text" id="searchInput" onkeyup="searchProducts()" 
+                       class="w-full text-xl outline-none text-gray-700 placeholder-gray-400 font-[Prompt]" 
+                       placeholder="ค้นหากล้อง, สตูดิโอ...">
+                <button onclick="toggleSearch()" class="text-gray-400 hover:text-red-500 text-2xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="searchResults" class="max-h-[60vh] overflow-y-auto p-2 bg-gray-50">
+                <div class="text-center py-10 text-gray-400">พิมพ์ชื่อรุ่นกล้อง หรือชื่อห้องสตูดิโอเพื่อค้นหา</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= SCRIPT รวม (Logic คำนวณ + Search + Logout) ================= -->
+    <script>
+        // --- 1. ตัวแปร Global ---
+        let cart = JSON.parse(localStorage.getItem('saferCart')) || [];
+        
+        // Element References
+        const container = document.getElementById('cart-items-container');
+        const emptyMsg = document.getElementById('empty-cart-msg');
+        const summarySection = document.getElementById('cart-summary');
+        const rentalInfoSection = document.getElementById('rental-info'); 
+        const totalPriceEl = document.getElementById('total-price');
+        const durationBadge = document.getElementById('duration-badge');
+
+        // ตัวแปรระยะเวลา (คำนวณแล้ว)
+        let calcDays = 1;
+        let calcHours = 1;
+
+        // --- 2. ฟังก์ชันแสดงตะกร้า (Render) ---
+        function renderCart() {
+            if(!container) return;
+            container.innerHTML = '';
+            
+            if (cart.length === 0) {
+                emptyMsg.classList.remove('hidden');
+                summarySection.classList.add('hidden');
+                rentalInfoSection.classList.add('hidden'); 
+            } else {
+                emptyMsg.classList.add('hidden');
+                summarySection.classList.remove('hidden');
+                summarySection.classList.add('flex');
+                rentalInfoSection.classList.remove('hidden'); 
+                
+                cart.forEach((item, index) => {
+                    // Logic เช็คว่าเป็นสตูดิโอหรือไม่
+                    const isStudio = item.name.toLowerCase().includes("studio");
+                    const unit = isStudio ? "ชม." : "วัน";
+                    const bgClass = isStudio ? "bg-purple-100 text-purple-600" : "bg-blue-100 text-blue-600";
+                    const typeText = isStudio ? "Studio (Hr)" : "House/Cam (Day)";
+
+                    const itemHTML = `
+                        <div class="flex flex-col md:flex-row items-center justify-between bg-white border border-gray-100 p-4 rounded-xl shadow-sm hover:shadow-md transition animate-fade-in relative group">
+                            <div class="flex items-center gap-5 w-full md:w-auto">
+                                <div class="w-24 h-24 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
+                                    <img src="${item.image}" class="w-full h-full object-cover">
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <h3 class="font-bold text-xl text-gray-800">${item.name}</h3>
+                                        <span class="text-[10px] font-bold px-2 py-0.5 rounded ${bgClass}">${typeText}</span>
+                                    </div>
+                                    <p class="text-sm text-gray-500">ราคาต่อหน่วย: ฿${item.price} / ${unit}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between w-full md:w-auto mt-4 md:mt-0 gap-8">
+                                <button onclick="removeItem(${index})" class="w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition flex items-center justify-center">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                        </div>`;
+                    container.innerHTML += itemHTML;
+                });
+            }
+            
+            // เรียกคำนวณเงินทุกครั้งที่ Render
+            calculateTotal();
+            updateBadge();
+        }
+
+        // --- 3. ฟังก์ชันคำนวณเงิน ---
+        function calculateTotal() {
+            if(!document.getElementById('pickupDate')) return;
+
+            const pDate = document.getElementById('pickupDate').value;
+            const pTime = document.getElementById('pickupTime').value;
+            const rDate = document.getElementById('returnDate').value;
+            const rTime = document.getElementById('returnTime').value;
+
+            calcDays = 1;
+            calcHours = 1;
+
+            if (pDate && pTime && rDate && rTime) {
+                const start = new Date(`${pDate}T${pTime}`);
+                const end = new Date(`${rDate}T${rTime}`);
+                const diffMs = end - start;
+
+                if (diffMs > 0) {
+                    calcHours = Math.ceil(diffMs / (1000 * 60 * 60)); 
+                    calcDays = Math.ceil(calcHours / 24); 
+                    
+                    durationBadge.innerHTML = `ระยะเวลา: <span class="text-green-700">${calcDays} วัน (${calcHours} ชม.)</span>`;
+                    durationBadge.className = "bg-green-100 text-xs font-bold px-3 py-1 rounded-full shadow-sm";
+                } else {
+                    durationBadge.innerText = "เวลาคืนต้องหลังเวลารับ";
+                    durationBadge.className = "bg-red-100 text-red-600 text-xs font-bold px-3 py-1 rounded-full shadow-sm";
+                }
+            } else {
+                durationBadge.innerText = "กรุณาเลือกวันเวลา";
+                durationBadge.className = "bg-gray-100 text-gray-500 text-xs font-bold px-3 py-1 rounded-full shadow-sm";
+            }
+
+            let grandTotal = 0;
+            cart.forEach(item => {
+                let price = parseInt(item.price.replace(/,/g, ''));
+                if (item.name.toLowerCase().includes("studio")) {
+                    grandTotal += (price * calcHours);
+                } else {
+                    grandTotal += (price * calcDays);
+                }
+            });
+
+            totalPriceEl.innerText = '฿' + grandTotal.toLocaleString();
+        }
+
+        // --- 4. ฟังก์ชันจัดการสินค้า ---
+        function removeItem(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('saferCart', JSON.stringify(cart));
+            renderCart();
+        }
+
+        function clearCart() {
+            if(cart.length > 0 && confirm('ลบสินค้าทั้งหมด?')) {
+                localStorage.removeItem('saferCart');
+                cart = [];
+                renderCart();
+            }
+        }
+
+        // --- 5. Checkout & Receipt ---
+        function checkout() {
+            if (cart.length === 0) return;
+
+            const pDate = document.getElementById('pickupDate').value;
+            const pTime = document.getElementById('pickupTime').value;
+            const rDate = document.getElementById('returnDate').value;
+            const rTime = document.getElementById('returnTime').value;
+
+            if (!pDate || !pTime || !rDate || !rTime) {
+                alert('กรุณาระบุวันและเวลารับ/คืนของ ให้ครบถ้วนครับ');
+                return;
+            }
+
+            if (new Date(`${rDate}T${rTime}`) <= new Date(`${pDate}T${pTime}`)) {
+                 alert('วันเวลาคืนของ ต้องหลังจากวันรับของครับ');
+                 return;
+            }
+
+            // Generate Bill
+            const randomID = Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('bill-order-id').innerText = "ORD-" + randomID;
+            document.getElementById('bill-pickup').innerText = `${pDate} @ ${pTime}`;
+            document.getElementById('bill-return').innerText = `${rDate} @ ${rTime}`;
+            document.getElementById('bill-total').innerText = totalPriceEl.innerText;
+
+            const billItems = document.getElementById('bill-items');
+            billItems.innerHTML = "";
+            
+            cart.forEach(item => {
+                let price = parseInt(item.price.replace(/,/g, ''));
+                let isStudio = item.name.toLowerCase().includes("studio");
+                
+                let subTotal = isStudio ? (price * calcHours) : (price * calcDays);
+                let multiplyText = isStudio ? `x ${calcHours} ชม.` : `x ${calcDays} วัน`;
+
+                billItems.innerHTML += `
+                    <div class="flex justify-between border-b border-gray-100 py-2">
+                        <div>
+                            <span class="block font-bold text-gray-700 text-xs">${item.name}</span>
+                            <span class="text-[10px] text-gray-400">@${item.price} ${multiplyText}</span>
+                        </div>
+                        <span class="font-bold text-gray-600 text-xs">฿${subTotal.toLocaleString()}</span>
+                    </div>`;
+            });
+
+            document.getElementById('receiptModal').classList.remove('hidden');
+        }
+
+        function finishOrder() {
+            document.getElementById('receiptModal').classList.add('hidden');
+            localStorage.removeItem('saferCart');
+            cart = [];
+            window.location.href = 'contact.html';
+        }
+
+        // --- 6. Search Logic ---
+        const allProducts = [
+        {
+            name: "Canon EOS R5",
+            category: "Camera",
+            price: "2,500",
+            image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=800"
+        },
+        {
+            name: "Nikon Z7 II",
+            category: "Camera",
+            price: "2,200",
+            image: "https://www.bigcamera.co.th/media/catalog/product/cache/69a3da6bcd95df779892f4b24fa6a6f7/n/i/nikon-z5-ii-body.jpg"
+        },
+        {
+            name: "Sony A7 IV",
+            category: "Camera",
+            price: "1,800",
+            image: "https://images.unsplash.com/photo-1516724562728-afc824a36e84?q=80&w=800"
+        },
+        {
+            name: "Sony PXW-X160",
+            category: "Camera",
+            price: "3,000",
+            image: "https://down-th.img.susercontent.com/file/ce33d18c06bf8c60a334888d4083d46b.webp"
+        },
+        {
+            name: "GoPro Hero 13",
+            category: "Camera",
+            price: "1,200",
+            image: "https://media-cdn.bnn.in.th/425689/gopro-camera-hero13-creator-edition-1-square_medium.jpg"
+        },
+        {
+            name: "Studio Room A (Modern Loft)",
+            category: "Studio",
+            price: "400",
+            image: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800"
+        },
+        {
+            name: "Studio Room B (Minimal White)",
+            category: "Studio",
+            price: "700",
+            image: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=800"
+        },
+        {
+            name: "House A (2 Floors)",
+            category: "House",
+            price: "4,000",
+            image: "https://storage.googleapis.com/scgsmartliving/Ideas_image/40065_pic1.webp"
+        },
+        {
+            name: "House B (บ้านพักต่างอากาศ)",
+            category: "House",
+            price: "5,200",
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvMkYJ2cXS_nDsF6rsqfHX0NI4dk6kn8nIkw&s"
+        },
+        {
+            name: "Minimal Home",
+            category: "House",
+            price: "8,500",
+            image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800"
+        },
+        {
+            name: "Vintage Wood",
+            category: "House",
+            price: "6,000",
+            image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=800"
+        },
+        {
+            name: "Loft Glass House",
+            category: "House",
+            price: "12,000",
+            image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800"
+        },
+        ];
+
+        function toggleSearch() {
+            const modal = document.getElementById('searchModal');
+            const input = document.getElementById('searchInput');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                setTimeout(() => input.focus(), 100);
+            } else {
+                modal.classList.add('hidden');
+                input.value = '';
+                document.getElementById('searchResults').innerHTML = '<div class="text-center py-10 text-gray-400">พิมพ์ชื่อรุ่นกล้อง หรือชื่อห้องสตูดิโอเพื่อค้นหา</div>';
+            }
+        }
+
+        function searchProducts() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (query.trim() === '') {
+                resultsContainer.innerHTML = '<div class="text-center py-10 text-gray-400">พิมพ์ชื่อรุ่นกล้อง หรือชื่อห้องสตูดิโอเพื่อค้นหา</div>';
+                return;
+            }
+
+            const filtered = allProducts.filter(item => 
+                item.name.toLowerCase().includes(query) || 
+                item.category.toLowerCase().includes(query)
+            );
+
+            if (filtered.length > 0) {
+                resultsContainer.innerHTML = '';
+                filtered.forEach(item => {
+                    const itemHTML = `
+                        <div class="flex items-center justify-between bg-white p-3 mb-2 rounded-lg shadow-sm hover:shadow-md transition">
+                            <div class="flex items-center gap-4">
+                                <img src="${item.image}" class="w-16 h-16 object-cover rounded-md border">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">${item.name}</h4>
+                                    <p class="text-xs text-gray-500 uppercase bg-gray-100 inline-block px-2 py-0.5 rounded">${item.category}</p>
+                                </div>
+                            </div>
+                            <div class="text-right flex flex-col md:flex-row items-center gap-3">
+                                <span class="font-bold text-green-600">฿${item.price}</span>
+                                <button onclick="addToCartFromSearch('${item.name}', '${item.price}', '${item.image}')" 
+                                        class="bg-black text-white px-4 py-1.5 rounded text-sm hover:bg-green-600 transition">
+                                    เช่าเลย
+                                </button>
+                            </div>
+                        </div>`;
+                    resultsContainer.innerHTML += itemHTML;
+                });
+            } else {
+                resultsContainer.innerHTML = '<div class="text-center py-10 text-gray-400">ไม่พบสินค้าที่ค้นหา</div>';
+            }
+        }
+
+        function addToCartFromSearch(name, price, image) {
+            cart.push({ name, price, image });
+            localStorage.setItem('saferCart', JSON.stringify(cart));
+            renderCart(); 
+            toggleSearch(); 
+        }
+
+        function updateBadge() {
+            const count = cart.length;
+            const cartLink = document.querySelector('.icon-cart-link');
+            if(!cartLink) return;
+            const oldBadge = cartLink.querySelector('.cart-badge');
+            if(oldBadge) oldBadge.remove();
+            if (count > 0) {
+                const badge = document.createElement('span');
+                badge.className = 'cart-badge absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white animate-bounce';
+                badge.innerText = count;
+                cartLink.appendChild(badge);
+            }
+        }
+
+        // --- 7. LOGOUT SYSTEM ---
+        function logout() {
+            if(confirm("คุณต้องการออกจากระบบใช่หรือไม่?")) {
+                localStorage.removeItem('saferUser'); 
+                alert("ออกจากระบบเรียบร้อยแล้ว");
+                window.location.reload(); 
+            }
+        }
+
+        (function checkLogin() {
+            const user = JSON.parse(localStorage.getItem('saferUser'));
+            const profileLink = document.querySelector('.icon-profile-link');
+            
+            if (user && user.image && profileLink) {
+                const profileImg = profileLink.querySelector('img');
+                if(profileImg) {
+                    profileImg.src = user.image;
+                    profileImg.style.border = "2px solid #22c55e"; 
+                    profileLink.href = "javascript:void(0)";
+                    profileLink.title = "คลิกเพื่อออกจากระบบ (Logout)";
+                    profileLink.onclick = function() { logout(); };
+                }
+            }
+        })();
+
+        // Start
+        renderCart();
+    </script>
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAFER - เข้าสู่ระบบ / ลงทะเบียน</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome สำหรับโลโก้ FB/Google -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style> body { font-family: 'Prompt', sans-serif; } </style>
+</head>
+
+<body class="bg-gray-200 min-h-screen flex flex-col justify-center items-center relative">
+
+    <div class="absolute top-6 left-6">
+        <a href="HOMEPAGE.html" class="text-gray-600 hover:text-green-600 font-bold flex items-center gap-2 transition hover:-translate-x-1">
+            ← กลับหน้าหลัก
+        </a>
+    </div>
+
+    <div class="bg-white p-8 rounded-xl shadow-xl w-full max-w-md border border-gray-100">
+        
+        <img src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" class="w-20 h-20 mx-auto mb-4 opacity-80">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">ยินดีต้อนรับ</h2>
+        <p class="text-center text-gray-400 text-sm mb-6">เข้าสู่ระบบเพื่อจัดการการเช่าของคุณ</p>
+        
+        <!-- Social Login Buttons -->
+        <div class="space-y-3 mb-6">
+            <!-- ปุ่ม Facebook -->
+            <button onclick="loginWithProvider('facebook')" class="w-full flex items-center justify-center gap-3 bg-[#1877F2] text-white py-3 rounded-lg font-bold hover:bg-[#1465c4] transition shadow-sm">
+                <i class="fa-brands fa-facebook text-xl"></i> ดำเนินการต่อด้วย Facebook
+            </button>
+            
+            <!-- ปุ่ม Google -->
+            <button onclick="loginWithProvider('google')" class="w-full flex items-center justify-center gap-3 bg-white text-gray-700 border border-gray-300 py-3 rounded-lg font-bold hover:bg-gray-50 transition shadow-sm">
+                <img src="Pic/New-Google-Logo.jpg" class="w-5 h-5"> ดำเนินการต่อด้วย Google
+            </button>
+        </div>
+
+        <div class="relative flex py-2 items-center">
+            <div class="flex-grow border-t border-gray-300"></div>
+            <span class="flex-shrink-0 mx-4 text-gray-400 text-xs">หรือ ลงทะเบียนด้วยอีเมล</span>
+            <div class="flex-grow border-t border-gray-300"></div>
+        </div>
+
+        <!-- Form ปกติ -->
+        <form class="space-y-4 mt-4">
+            <input type="text" id="manualName" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-400 outline-none" placeholder="ชื่อ - นามสกุล">
+            <input type="email" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-400 outline-none" placeholder="อีเมล">
+            <input type="password" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-400 outline-none" placeholder="รหัสผ่าน">
+            
+            <button type="button" onclick="loginManual()" class="w-full bg-green-500 text-white py-3 rounded-md hover:bg-green-600 font-bold shadow-md transition mt-6">
+                สมัครสมาชิก / เข้าสู่ระบบ
+            </button>
+        </form>
+    </div>
+
+    <!-- Script จำลองการ Login -->
+    <script>
+        function loginWithProvider(provider) {
+            let userProfile = {};
+
+            // จำลองข้อมูลผู้ใช้ตามปุ่มที่กด
+            if(provider === 'facebook') {
+                userProfile = {
+                    name: 'Facebook User',
+                    // รูปโปรไฟล์ Facebook จำลอง
+                    image: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop' 
+                };
+                alert('กำลังเชื่อมต่อกับ Facebook...');
+            } else if (provider === 'google') {
+                userProfile = {
+                    name: 'Google User',
+                    // รูปโปรไฟล์ Google จำลอง
+                    image: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=200&auto=format&fit=crop'
+                };
+                alert('กำลังเชื่อมต่อกับ Google...');
+            }
+
+            // บันทึกข้อมูลลงเครื่อง (LocalStorage)
+            localStorage.setItem('saferUser', JSON.stringify(userProfile));
+
+            // เด้งไปหน้าหลัก
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 500);
+        }
+
+        function loginManual() {
+            const name = document.getElementById('manualName').value || 'Member';
+            const userProfile = {
+                name: name,
+                // รูป default สำหรับคนสมัครปกติ
+                image: 'https://cdn-icons-png.flaticon.com/512/1144/1144760.png'
+            };
+            
+            localStorage.setItem('saferUser', JSON.stringify(userProfile));
+            alert("ลงทะเบียนสำเร็จ! ยินดีต้อนรับคุณ " + name);
+            window.location.href = "HOMEPAGE.html";
+        }
+    </script>
+<!-- ================= JAVASCRIPT รวม ================= -->
+    <script>
+        // 1. ฟังก์ชันเพิ่มของลงตะกร้า
+        function addToCart(name, price, image) {
+            const product = { name, price, image };
+            let cart = JSON.parse(localStorage.getItem('saferCart')) || [];
+            cart.push(product);
+            localStorage.setItem('saferCart', JSON.stringify(cart));
+            window.location.href = 'cart.html';
+        }
+
+        // 2. ฟังก์ชันอัปเดตเลขบนตะกร้า + เช็ค Login (ทำงานอัตโนมัติเมื่อเปิดหน้า)
+        (function initPage() {
+            // --- อัปเดตเลขตะกร้า ---
+            const cart = JSON.parse(localStorage.getItem('saferCart')) || [];
+            const count = cart.length;
+            const cartLink = document.querySelector('.icon-cart-link');
+
+            if (count > 0 && cartLink) {
+                const badge = document.createElement('span');
+                badge.className = 'absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white animate-bounce';
+                badge.innerText = count;
+                cartLink.appendChild(badge);
+            }
+
+            // --- เช็ค Login เพื่อเปลี่ยนรูปโปรไฟล์ ---
+            const user = JSON.parse(localStorage.getItem('saferUser'));
+            if (user && user.image) {
+                const profileImg = document.querySelector('.icon-profile-link img');
+                if (profileImg) {
+                    profileImg.src = user.image;
+                    profileImg.style.border = "2px solid #22c55e"; // กรอบเขียว
+                }
+            }
+        })();
+    </script>
+    <!-- ================= SEARCH MODAL (หน้าต่างค้นหา) ================= -->
+<div id="searchModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-start justify-center pt-20 backdrop-blur-sm transition-opacity duration-300">
+    <div class="bg-white w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden transform transition-all scale-100 mx-4">
+        
+        <!-- ช่องกรอกคำค้นหา -->
+        <div class="p-4 border-b flex items-center gap-3">
+            <i class="fa-solid fa-magnifying-glass text-gray-400 text-xl"></i>
+            <input type="text" id="searchInput" onkeyup="searchProducts()" 
+                   class="w-full text-xl outline-none text-gray-700 placeholder-gray-400 font-[Prompt]" 
+                   placeholder="ค้นหากล้อง, สตูดิโอ...">
+            <button onclick="toggleSearch()" class="text-gray-400 hover:text-red-500 text-2xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- พื้นที่แสดงผลลัพธ์ -->
+        <div id="searchResults" class="max-h-[60vh] overflow-y-auto p-2 bg-gray-50">
+            <!-- ผลลัพธ์จะเด้งมาตรงนี้ -->
+            <div class="text-center py-10 text-gray-400">
+                พิมพ์ชื่อรุ่นกล้อง หรือชื่อห้องสตูดิโอเพื่อค้นหา
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= SCRIPT ระบบค้นหา ================= -->
+<script>
+    // 1. ฐานข้อมูลสินค้า (ต้องใส่ให้ครบทุกชิ้นที่มีในร้าน)
+    const allProducts = [
+        {
+            name: "Canon EOS R5",
+            category: "Camera",
+            price: "2,500",
+            image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=800"
+        },
+        {
+            name: "Nikon Z7 II",
+            category: "Camera",
+            price: "2,200",
+            image: "https://www.bigcamera.co.th/media/catalog/product/cache/69a3da6bcd95df779892f4b24fa6a6f7/n/i/nikon-z5-ii-body.jpg"
+        },
+        {
+            name: "Sony A7 IV",
+            category: "Camera",
+            price: "1,800",
+            image: "https://images.unsplash.com/photo-1516724562728-afc824a36e84?q=80&w=800"
+        },
+        {
+            name: "Sony PXW-X160",
+            category: "Camera",
+            price: "3,000",
+            image: "https://down-th.img.susercontent.com/file/ce33d18c06bf8c60a334888d4083d46b.webp"
+        },
+        {
+            name: "GoPro Hero 13",
+            category: "Camera",
+            price: "1,200",
+            image: "https://media-cdn.bnn.in.th/425689/gopro-camera-hero13-creator-edition-1-square_medium.jpg"
+        },
+        {
+            name: "Studio Room A (Modern Loft)",
+            category: "Studio",
+            price: "4,500",
+            image: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800"
+        },
+        {
+            name: "Studio Room B (Minimal White)",
+            category: "Studio",
+            price: "5,500",
+            image: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=800"
+        },
+        {
+            name: "House A (2 Floors)",
+            category: "House",
+            price: "4,000",
+            image: "https://storage.googleapis.com/scgsmartliving/Ideas_image/40065_pic1.webp"
+        },
+        {
+            name: "House B (บ้านพักต่างอากาศ)",
+            category: "House",
+            price: "5,200",
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvMkYJ2cXS_nDsF6rsqfHX0NI4dk6kn8nIkw&s"
+        },
+        
+        
+        
+    ];
+
+    // 2. ฟังก์ชัน เปิด/ปิด หน้าต่างค้นหา
+    function toggleSearch() {
+        const modal = document.getElementById('searchModal');
+        const input = document.getElementById('searchInput');
+        
+        if (modal.classList.contains('hidden')) {
+            modal.classList.remove('hidden');
+            setTimeout(() => input.focus(), 100); // ให้ Cursor ไปกระพริบในช่องทันที
+        } else {
+            modal.classList.add('hidden');
+            input.value = ''; // ล้างคำค้นหาเมื่อปิด
+            document.getElementById('searchResults').innerHTML = '<div class="text-center py-10 text-gray-400">พิมพ์ชื่อรุ่นกล้อง หรือชื่อห้องสตูดิโอเพื่อค้นหา</div>';
+        }
+    }
+
+    // 3. ฟังก์ชันค้นหาและแสดงผล
+    function searchProducts() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const resultsContainer = document.getElementById('searchResults');
+        
+        // ถ้าช่องว่าง ให้แสดงข้อความเริ่มต้น
+        if (query.trim() === '') {
+            resultsContainer.innerHTML = '<div class="text-center py-10 text-gray-400">พิมพ์ชื่อรุ่นกล้อง หรือชื่อห้องสตูดิโอเพื่อค้นหา</div>';
+            return;
+        }
+
+        // กรองสินค้า (เช็คชื่อ หรือ หมวดหมู่)
+        const filtered = allProducts.filter(item => 
+            item.name.toLowerCase().includes(query) || 
+            item.category.toLowerCase().includes(query)
+        );
+
+        // แสดงผล
+        if (filtered.length > 0) {
+            resultsContainer.innerHTML = '';
+            filtered.forEach(item => {
+                const itemHTML = `
+                    <div class="flex items-center justify-between bg-white p-3 mb-2 rounded-lg shadow-sm hover:shadow-md transition">
+                        <div class="flex items-center gap-4">
+                            <img src="${item.image}" class="w-16 h-16 object-cover rounded-md border">
+                            <div>
+                                <h4 class="font-bold text-gray-800">${item.name}</h4>
+                                <p class="text-xs text-gray-500 uppercase bg-gray-100 inline-block px-2 py-0.5 rounded">${item.category}</p>
+                            </div>
+                        </div>
+                        <div class="text-right flex flex-col md:flex-row items-center gap-3">
+                            <span class="font-bold text-green-600">฿${item.price}</span>
+                            <button onclick="addToCartFromSearch('${item.name}', '${item.price}', '${item.image}')" 
+                                    class="bg-black text-white px-4 py-1.5 rounded text-sm hover:bg-green-600 transition">
+                                เช่าเลย
+                            </button>
+                        </div>
+                    </div>
+                `;
+                resultsContainer.innerHTML += itemHTML;
+            });
+        } else {
+            resultsContainer.innerHTML = `
+                <div class="text-center py-10 text-gray-400">
+                    <i class="fa-regular fa-face-frown text-3xl mb-2"></i><br>
+                    ไม่พบสินค้าที่ค้นหา
+                </div>`;
+        }
+    }
+
+    // 4. ฟังก์ชันเพิ่มลงตะกร้า (สำหรับหน้าค้นหาโดยเฉพาะ)
+    function addToCartFromSearch(name, price, image) {
+        let cart = JSON.parse(localStorage.getItem('saferCart')) || [];
+        cart.push({ name, price, image });
+        localStorage.setItem('saferCart', JSON.stringify(cart));
+        window.location.href = 'cart.html';
+    }
+</script>
+</body>
+</html>

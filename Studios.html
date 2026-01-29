@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>SAFER - สตูดิโอ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="Pic/ดาวน์โหลด (2).png">
+    <style> body { font-family: 'Prompt', sans-serif; } </style>
+</head>
+<body class="bg-[#FEF9E7] overflow-x-hidden relative min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <nav class="bg-white py-4 px-6 shadow-sm z-20 sticky top-0">
+        <div class="max-w-7xl mx-auto">
+            <!-- เพิ่ม class icon-cart-link และ icon-profile-link -->
+            <div class="flex justify-end gap-4 mb-4 items-center">
+                <a href="Cart.html" class="hover:opacity-80 transition relative icon-cart-link">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" class="w-8 h-8 object-contain">
+                </a>
+                <a href="Register.html" class="hover:opacity-80 transition icon-profile-link">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" class="w-8 h-8 object-contain rounded-full">
+                </a>
+            </div>
+            <div class="flex flex-wrap items-center justify-between">
+                <a href="HOMEPAGE.html" class="hover:text-green-600 transition group text-center px-4">
+                    <span class="block text-lg font-medium group-hover:font-bold">หน้าหลัก</span>
+                    <span class="block text-sm font-bold group-hover:text-green-700">Home</span>
+                </a>
+                <div class="hidden md:flex gap-8 items-center text-center text-gray-700">
+                    <a href="CAMERA.html" class="hover:text-green-600 transition group">
+                        <span class="block text-lg font-medium group-hover:font-bold">กล้อง</span>
+                        <span class="block text-sm font-bold group-hover:text-green-700">Camera</span>
+                    </a>
+                    
+                    <!-- Active Studio -->
+                    <div class="bg-[#C6EBC5] rounded-3xl px-8 py-2 text-center shadow-sm border border-green-200 cursor-default">
+                        <span class="block text-lg font-bold text-gray-900">สตูดิโอ</span>
+                        <span class="block text-sm font-bold uppercase text-gray-700">Studios</span>
+                    </div>
+                    <a href="HOUSE.HTML" class="hover:text-green-600 transition group">
+                        <span class="block text-lg font-medium group-hover:font-bold">บ้าน</span>
+                        <span class="block text-sm font-bold group-hover:text-green-700">House</span>
+                    </a>
+                    <a href="Contact.html" class="hover:text-green-600 transition group">
+                        <span class="block text-lg font-medium group-hover:font-bold">ติดต่อเรา</span>
+                        <span class="block text-sm font-bold group-hover:text-green-700">Contact</span>
+                    </a>
+                    <a href="howtorent.html" class="hover:text-green-600 transition group">
+                        <span class="block text-lg font-medium group-hover:font-bold">วิธีเช่า</span>
+                        <span class="block text-sm font-bold group-hover:text-green-700">How to Rent</span>
+                    </a>
+                </div>
+                <!-- เพิ่ม onclick และ cursor-pointer -->
+                <div class="text-2xl text-gray-800 cursor-pointer hover:text-green-600 transition" onclick="toggleSearch()">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-6 py-12 w-full">
+        <h1 class="text-3xl font-bold mb-8 text-gray-800 border-l-8 border-green-400 pl-4">สตูดิโอให้เช่า (Studio List)</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden group">
+                <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800" class="w-full h-64 object-cover group-hover:scale-105 transition duration-500">
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold text-gray-800">Studio Room A (Modern Loft)</h3>
+                    <p class="text-2xl font-bold text-gray-600">ตั้งอยู่ที่ชั้น 2 ของร้าน</p>
+                    <p class="text-gray-500 mt-2">แสงธรรมชาติ หน้าต่างบานใหญ่ เก็บเสียงดี</p>
+                    <div class="flex justify-between items-center mt-6">
+                        <span class="text-green-600 font-bold text-xl">฿400 / ชม.</span>
+                        <button onclick="addToCart('Studio Room A', '400', 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800')" class="bg-black text-white px-6 py-2 rounded-lg hover:bg-green-600 transition font-bold">เช่าห้องนี้</button>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden group">
+                <img src="https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=800" class="w-full h-64 object-cover group-hover:scale-105 transition duration-500">
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold text-gray-800">Studio Room B (Minimal White)</h3>
+                    <p class="text-2xl font-bold text-gray-600">ตั้งอยู่ที่ 215 Cielo Condo รังสิต</p>
+                    <p class="text-gray-500 mt-2">โทนสีขาวสะอาดตา พร้อมฉาก Limbo</p>
+                    <div class="flex justify-between items-center mt-6">
+                        <span class="text-green-600 font-bold text-xl">฿700 / ชม.</span>
+                        <button onclick="addToCart('Studio Room B', '700', 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=800')" class="bg-black text-white px-6 py-2 rounded-lg hover:bg-green-600 transition font-bold">เช่าห้องนี้</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script รวม -->
+    <script>
+        function addToCart(name, price, image) {
+            let cart = JSON.parse(localStorage.getItem('saferCart')) || [];
+            cart.push({ name, price, image });
+            localStorage.setItem('saferCart', JSON.stringify(cart));
+            window.location.href = 'cart.html';
+        }
+
+        (function initPage() {
+            // อัปเดตเลขตะกร้า
+            const cart = JSON.parse(localStorage.getItem('saferCart')) || [];
+            const count = cart.length;
+            const cartLink = document.querySelector('.icon-cart-link');
+
+            if (count > 0 && cartLink) {
+                const badge = document.createElement('span');
+                badge.className = 'absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white animate-bounce';
+                badge.innerText = count;
+                cartLink.appendChild(badge);
+            }
+
+            // เช็ค Login
+            const user = JSON.parse(localStorage.getItem('saferUser'));
+            if (user && user.image) {
+                const profileImg = document.querySelector('.icon-profile-link img');
+                if (profileImg) {
+                    profileImg.src = user.image;
+                    profileImg.style.border = "2px solid #22c55e";
+                }
+            }
+        })();
+    </script>
+    <!-- ================= SCRIPT รวมสำหรับหน้าทั่วไป (Logout + Search + AddCart) ================= -->
+    <script>
+        // --- 1. ระบบ LOGOUT (สำคัญ!) ---
+        function logout() {
+            if(confirm("คุณต้องการออกจากระบบใช่หรือไม่?")) {
+                localStorage.removeItem('saferUser'); // ลบข้อมูล User
+                alert("ออกจากระบบเรียบร้อยแล้ว");
+                window.location.reload(); // รีเฟรชหน้าเว็บ
+            }
+        }
+
+        // เช็ค Login และเปลี่ยนปุ่ม
+        (function checkLogin() {
+            const user = JSON.parse(localStorage.getItem('saferUser'));
+            const profileLink = document.querySelector('.icon-profile-link');
+            
+            if (user && user.image && profileLink) {
+                const profileImg = profileLink.querySelector('img');
+                if(profileImg) {
+                    // เปลี่ยนรูป
+                    profileImg.src = user.image;
+                    profileImg.style.border = "2px solid #22c55e"; 
+                    
+                    // เปลี่ยนการทำงานของลิงก์
+                    profileLink.href = "javascript:void(0)";
+                    profileLink.title = "คลิกเพื่อออกจากระบบ (Logout)";
+                    
+                    // ฝังคำสั่ง Logout
+                    profileLink.onclick = function() {
+                        logout();
+                    };
+                }
+            }
+        })();
+
+        // --- 2. ระบบเพิ่มของลงตะกร้า (จากปุ่มหน้าเว็บ) ---
+        function addToCart(name, price, image) {
+            let cart = JSON.parse(localStorage.getItem('saferCart')) || [];
+            cart.push({ name, price, image });
+            localStorage.setItem('saferCart', JSON.stringify(cart));
+            
+            // อัปเดตเลขตะกร้าทันที
+            updateBadge();
+            
+            // (ทางเลือก) จะให้เด้งไปหน้า Cart เลย หรือแค่อัปเดตเลขก็ได้
+            // ถ้าอยากให้เด้งไปหน้า Cart ให้เอา Comment บรรทัดล่างออก
+            window.location.href = 'cart.html'; 
+        }
+
+        // --- 3. ระบบตัวเลขแจ้งเตือนบนตะกร้า (Badge) ---
+        function updateBadge() {
+            const cart = JSON.parse(localStorage.getItem('saferCart')) || [];
+            const count = cart.length;
+            const cartLink = document.querySelector('.icon-cart-link');
+            
+            if(!cartLink) return;
+
+            const oldBadge = cartLink.querySelector('.cart-badge');
+            if(oldBadge) oldBadge.remove();
+
+            if (count > 0) {
+                const badge = document.createElement('span');
+                badge.className = 'cart-badge absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white animate-bounce';
+                badge.innerText = count;
+                cartLink.appendChild(badge);
+            }
+        }
+
+        // --- 4. ระบบ Search (เหมือนเดิม) ---
+        const allProducts = [
+            {
+            name: "Canon EOS R5",
+            category: "Camera",
+            price: "2,500",
+            image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=800"
+        },
+        {
+            name: "Nikon Z7 II",
+            category: "Camera",
+            price: "2,200",
+            image: "https://www.bigcamera.co.th/media/catalog/product/cache/69a3da6bcd95df779892f4b24fa6a6f7/n/i/nikon-z5-ii-body.jpg"
+        },
+        {
+            name: "Sony A7 IV",
+            category: "Camera",
+            price: "1,800",
+            image: "https://images.unsplash.com/photo-1516724562728-afc824a36e84?q=80&w=800"
+        },
+        {
+            name: "Sony PXW-X160",
+            category: "Camera",
+            price: "3,000",
+            image: "https://down-th.img.susercontent.com/file/ce33d18c06bf8c60a334888d4083d46b.webp"
+        },
+        {
+            name: "GoPro Hero 13",
+            category: "Camera",
+            price: "1,200",
+            image: "https://media-cdn.bnn.in.th/425689/gopro-camera-hero13-creator-edition-1-square_medium.jpg"
+        },
+        {
+            name: "Studio Room A (Modern Loft)",
+            category: "Studio",
+            price: "400",
+            image: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800"
+        },
+        {
+            name: "Studio Room B (Minimal White)",
+            category: "Studio",
+            price: "700",
+            image: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=800"
+        },
+        {
+            name: "House A (2 Floors)",
+            category: "House",
+            price: "4,000",
+            image: "https://storage.googleapis.com/scgsmartliving/Ideas_image/40065_pic1.webp"
+        },
+        {
+            name: "House B (บ้านพักต่างอากาศ)",
+            category: "House",
+            price: "5,200",
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvMkYJ2cXS_nDsF6rsqfHX0NI4dk6kn8nIkw&s"
+        },
+        {
+            name: "Minimal Home",
+            category: "House",
+            price: "8,500",
+            image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800"
+        },
+        {
+            name: "Vintage Wood",
+            category: "House",
+            price: "6,000",
+            image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=800"
+        },
+        {
+            name: "Loft Glass House",
+            category: "House",
+            price: "12,000",
+            image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800"
+        },
+        ];
+
+        function toggleSearch() {
+            const modal = document.getElementById('searchModal');
+            const input = document.getElementById('searchInput');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                setTimeout(() => input.focus(), 100);
+            } else {
+                modal.classList.add('hidden');
+                input.value = '';
+                document.getElementById('searchResults').innerHTML = '<div class="text-center py-10 text-gray-400">พิมพ์ชื่อรุ่นกล้อง, สตูดิโอ หรือชื่อบ้านพัก</div>';
+            }
+        }
+
+        function searchProducts() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (query.trim() === '') {
+                resultsContainer.innerHTML = '<div class="text-center py-10 text-gray-400">พิมพ์ชื่อรุ่นกล้อง, สตูดิโอ หรือชื่อบ้านพัก</div>';
+                return;
+            }
+
+            const filtered = allProducts.filter(item => 
+                item.name.toLowerCase().includes(query) || 
+                item.category.toLowerCase().includes(query)
+            );
+
+            if (filtered.length > 0) {
+                resultsContainer.innerHTML = '';
+                filtered.forEach(item => {
+                    const itemHTML = `
+                        <div class="flex items-center justify-between bg-white p-3 mb-2 rounded-lg shadow-sm hover:shadow-md transition">
+                            <div class="flex items-center gap-4">
+                                <img src="${item.image}" class="w-16 h-16 object-cover rounded-md border">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">${item.name}</h4>
+                                    <p class="text-xs text-gray-500 uppercase bg-gray-100 inline-block px-2 py-0.5 rounded">${item.category}</p>
+                                </div>
+                            </div>
+                            <div class="text-right flex flex-col md:flex-row items-center gap-3">
+                                <span class="font-bold text-green-600">฿${item.price}</span>
+                                <button onclick="addToCartFromSearch('${item.name}', '${item.price}', '${item.image}')" 
+                                        class="bg-black text-white px-4 py-1.5 rounded text-sm hover:bg-green-600 transition">
+                                    เช่าเลย
+                                </button>
+                            </div>
+                        </div>`;
+                    resultsContainer.innerHTML += itemHTML;
+                });
+            } else {
+                resultsContainer.innerHTML = '<div class="text-center py-10 text-gray-400">ไม่พบสินค้าที่ค้นหา</div>';
+            }
+        }
+
+        function addToCartFromSearch(name, price, image) {
+            let cart = JSON.parse(localStorage.getItem('saferCart')) || [];
+            cart.push({ name, price, image });
+            localStorage.setItem('saferCart', JSON.stringify(cart));
+            
+            // อัปเดตเลขและเด้งไปหน้า Cart
+            updateBadge();
+            toggleSearch();
+            window.location.href = 'Cart.html'; 
+        }
+
+        // เริ่มทำงานเมื่อเปิดหน้า
+        updateBadge();
+    </script>
+</body>
+</html>
